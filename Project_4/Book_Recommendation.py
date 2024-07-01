@@ -11,15 +11,16 @@ class Rec():
     def search_books(self,keyword):
         self.first = False
         keyword = [key.lower() for key in keyword]
+        tag = {'title':keyword[0],'authors':keyword[1],'publisher':keyword[2]}
         results = self.books[
             (books_df['title'].str.lower().str.contains(keyword[0])) &
             (books_df['authors'].str.lower().str.contains(keyword[1])) &
             (books_df['publisher'].str.lower().str.contains(keyword[2]))
         ]
 
-        self.display_books(results)
+        self.display_books(results,tag)
 
-    def display_books(self,books):
+    def display_books(self,books,keyword):
         if not len(books):
             print("\n No books found.\n")
         else:
@@ -36,7 +37,7 @@ class Rec():
                 print(f" Publication Date: {book['publication_date']}")
                 print(f" Publisher: {book['publisher']}")
                 print('\n')
-        print(f' Total Books Found : {len(books)}\n')
+        print(f' Total Books Found ({",".join([f" {i}:{keyword[i]}" for i in keyword if keyword[i]!=""])} ): {len(books)}\n')
         self.interface()
 
     def interface(self):
