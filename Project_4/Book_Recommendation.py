@@ -1,7 +1,6 @@
 import pandas as pd
 
-# Load the dataset
-books_df = pd.read_csv('Project_1/books.csv')
+books_df = pd.read_csv('Project_4/books.csv')
 
 class Rec():
     def __init__(self,books_store):
@@ -11,18 +10,18 @@ class Rec():
 
     def search_books(self,keyword):
         self.first = False
-        keyword = keyword.lower()
+        keyword = [key.lower() for key in keyword]
         results = self.books[
-            books_df['title'].str.lower().str.contains(keyword) |
-            books_df['authors'].str.lower().str.contains(keyword) |
-            books_df['publisher'].str.lower().str.contains(keyword)
+            (books_df['title'].str.lower().str.contains(keyword[0])) &
+            (books_df['authors'].str.lower().str.contains(keyword[1])) &
+            (books_df['publisher'].str.lower().str.contains(keyword[2]))
         ]
 
         self.display_books(results)
 
     def display_books(self,books):
         if not len(books):
-            print("No books found.")
+            print("\n No books found.\n")
         else:
             for index, book in books.iterrows():
                 print(f" Title: {book['title']}")
@@ -37,7 +36,7 @@ class Rec():
                 print(f" Publication Date: {book['publication_date']}")
                 print(f" Publisher: {book['publisher']}")
                 print('\n')
-
+        print(f' Total Books Found : {len(books)}\n')
         self.interface()
 
     def interface(self):
@@ -46,7 +45,11 @@ class Rec():
         else:
             print(" Another Search?")
 
-        keyword = input(" Enter a keyword to search for books: ")
+        print(" Enter a keyword to search for books: \n")
+        auth = input(" Enter author's name: ")
+        pub = input(" Enter publisher's name: ")
+        title = input(" Enter book's title: ")
+        keyword=[title,auth,pub]
         self.search_books(keyword)
 
 book_search = Rec(books_store=books_df)
